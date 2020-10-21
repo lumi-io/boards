@@ -1,4 +1,5 @@
-from flask import Blueprint, request
+from flask import Blueprint
+# from flask import request
 # from api.models import db, Person, Email
 
 main = Blueprint("main", __name__)  # initialize blueprint
