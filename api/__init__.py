@@ -21,6 +21,11 @@ def create_app(test_config=None):
     """
     app = Flask(__name__)
 
+    # MongoDB Configuration
+    app.config['MONGODB_SETTINGS'] = {
+        "db": "myapp"
+    }
+
     # import and register blueprints
     from api.views import main
     # from api.views import filename here
