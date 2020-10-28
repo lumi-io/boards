@@ -12,6 +12,13 @@ Application Tracking System
 pipenv shell
 ```
 
+### To deactivate a virtual environment
+
+```bash
+deactivate
+exit
+```
+
 ### To install all the dependencies from pipenv
 
 ```bash
@@ -30,6 +37,16 @@ pipenv install dependency_name
 export FLASK_APP=manage.py
 flask run
 ```
+
+### To run the Flask App on Debug Mode
+
+```bash
+export FLASK_APP=manage.py
+export FLASK_ENV=development
+flask run
+```
+
+
 
 ### Documentation/Guides
 - https://flask.palletsprojects.com/en/1.0.x/

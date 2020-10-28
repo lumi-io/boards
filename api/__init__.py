@@ -1,10 +1,14 @@
-import os
-import logging
+# import os
+# import logging
 
-from flask import Flask, request
+from flask import Flask
+# from flask import request
 # from flask_migrate import Migrate
 
-# why we use application factories http://flask.pocoo.org/docs/1.0/patterns/appfactories/#app-factories
+# why we use application factories
+# http://flask.pocoo.org/docs/1.0/patterns/appfactories/#app-factories
+
+
 def create_app(test_config=None):
     """
     The flask application factory. To run the app somewhere else you can:
@@ -16,6 +20,11 @@ def create_app(test_config=None):
         app.run()
     """
     app = Flask(__name__)
+
+    # MongoDB Configuration
+    app.config['MONGODB_SETTINGS'] = {
+        "db": "myapp"
+    }
 
     # import and register blueprints
     from api.views import main
