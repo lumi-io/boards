@@ -2,6 +2,7 @@
 # import logging
 
 from flask import Flask
+from flask_mongoengine import MongoEngine
 # from flask import request
 # from flask_migrate import Migrate
 
@@ -22,15 +23,22 @@ def create_app(test_config=None):
     app = Flask(__name__)
 
     # MongoDB Configuration
-    app.config['MONGODB_SETTINGS'] = {
-        "db": "myapp"
-    }
+    print("Retrieving configuration variables.")
+    app.config.from_pyfile('config.py')
+    print("Connecting to MongoDB instance.")
+    try:
+        db = MongoEngine(app)
+    except Exception as e:
+        print(e)
+
+    print("MongoDB connected.")
 
     # import and register blueprints
     from api.views import main
     # from api.views import filename here
 
     # Why blueprints http://flask.pocoo.org/docs/1.0/blueprints/
+    print("Registering Flask Blueprints.")
     app.register_blueprint(main.main)
 
     # register error Handler
