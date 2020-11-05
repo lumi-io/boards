@@ -9,6 +9,9 @@ verify_ssl = true
 flask = "*"
 flask-mongoengine = "*"
 python-dotenv = "*"
+pytest = "*"
+coverage = "*"
+flake8 = "*"
 
 [requires]
 python_version = "3.7"
