@@ -13,6 +13,10 @@ pytest = "*"
 coverage = "*"
 flake8 = "*"
 pymongo = "*"
+flask-jwt-extended = "*"
+flask-bcrypt = "*"
+jsonschema = "*"
+flask-pymongo = "*"
 
 [requires]
 python_version = "3.7"
