@@ -12,6 +12,7 @@ python-dotenv = "*"
 pytest = "*"
 coverage = "*"
 flake8 = "*"
+pymongo = "*"
 
 [requires]
 python_version = "3.7"
