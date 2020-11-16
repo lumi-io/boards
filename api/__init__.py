@@ -3,6 +3,7 @@
 
 from flask import Flask
 from flask_mongoengine import MongoEngine
+from pymongo import MongoClient
 # from flask import request
 # from flask_migrate import Migrate
 
@@ -26,8 +27,12 @@ def create_app(test_config=None):
     print("Retrieving configuration variables.")
     app.config.from_pyfile('config.py')
     print("Connecting to MongoDB instance.")
+
     try:
-        db = MongoEngine(app)
+        client = MongoClient(
+            "mongodb+srv://"+app.config["MONGODB_USERNAME"]+":"+app.config["MONGODB_PASSWORD"]+"@"+app.config["MONGODB_HOST"])
+        db = client.test
+
     except Exception as e:
         print(e)
 
