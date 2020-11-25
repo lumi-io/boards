@@ -5,7 +5,7 @@ from api.validators.user import validate_user
 from api import mongo, flask_bcrypt
 
 admin_auth = Blueprint("admin_auth", __name__)  # initialize blueprint
-
+users = mongo.db.users
 
 @admin_auth.route('/admin/register', methods=['POST'])
 def register():
@@ -15,6 +15,17 @@ def register():
 
     if data['ok']:
         data = data['data']
+        email = data["email"]
+        user_exists = users.find_one({
+            "email": email
+        })
+        if not user_exists:
+            response_object = {
+                "status": False,
+                "message": "User already exists."
+            }
+            return make_response(jsonify(response_object), 400)
+
         data['password'] = flask_bcrypt.generate_password_hash(
             data['password']
         )
@@ -40,7 +51,7 @@ def auth_user():
     data = validate_user(request.get_json())
     if data['ok']:
         data = data['data']
-        user = mongo.db.users.find_one({
+        user = users.find_one({
             "email": data["email"]
         })
 
