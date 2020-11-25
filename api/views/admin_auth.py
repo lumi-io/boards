@@ -2,10 +2,18 @@ from flask import Blueprint, jsonify, request, make_response
 from flask_jwt_extended import (create_access_token, create_refresh_token,
                                 jwt_required, jwt_refresh_token_required, get_jwt_identity)
 from api.validators.user import validate_user
-from api import mongo, flask_bcrypt
+from api import mongo, flask_bcrypt, jwt
 
 admin_auth = Blueprint("admin_auth", __name__)  # initialize blueprint
 users = mongo.db.users
+
+@jwt.unauthorized_loader
+def unauthorized_response(callback):
+    response_object = {
+        "status": False,
+        "message": "Missing authorization header."
+    }
+    return make_response(jsonify(response_object), 401)
 
 @admin_auth.route('/admin/register', methods=['POST'])
 def register():
@@ -70,3 +78,13 @@ def auth_user():
     else:
         response_object = {"status": False, "message": 'Bad request parameters: {}'.format(data['message'])}
         return make_response(jsonify(response_object), 400)
+
+@admin_auth.route('/admin/refresh', methods=['POST'])
+@jwt_refresh_token_required
+def refresh():
+    current_user = get_jwt_identity()
+    ret = {
+            'token': create_access_token(identity=current_user)
+    }
+    response_object = {"status": True, "data": ret}
+    return make_response(jsonify(response_object), 200)

@@ -22,6 +22,7 @@ class JSONEncoder(json.JSONEncoder):
 # Objects and Instances to be used in other files are placed here
 mongo = PyMongo()
 app = Flask(__name__)
+# https://flask-jwt-extended.readthedocs.io/en/stable/api/
 jwt = JWTManager(app)
 flask_bcrypt = Bcrypt(app)
 
