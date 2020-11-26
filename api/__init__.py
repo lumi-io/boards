@@ -5,15 +5,33 @@ from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from flask import Flask
 from flask_pymongo import PyMongo
+from bson.objectid import ObjectId
 
+class JSONEncoder(json.JSONEncoder):
+    """ extend json-encoder class """
+
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        if isinstance(o, set):
+            return list(o)
+        if isinstance(o, datetime.datetime):
+            return str(o)
+        return json.JSONEncoder.default(self, o)
+
+# Objects and Instances to be used in other files are placed here
 mongo = PyMongo()
+app = Flask(__name__)
+# https://flask-jwt-extended.readthedocs.io/en/stable/api/
+jwt = JWTManager(app)
+flask_bcrypt = Bcrypt(app)
 
 
 def create_app(test_config=None):
-    app = Flask(__name__)
-    jwt = JWTManager(app)
-    flask_bcrypt = Bcrypt(app)
+    """ Initializes and adds necessary information into the Flask app object """
 
+    app.config['JWT_SECRET_KEY'] = "test"
+    app.json_encoder = JSONEncoder
     # MongoDB Configuration
     print("Retrieving configuration variables.")
     app.config.from_pyfile('config.py')
