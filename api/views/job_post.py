@@ -8,6 +8,7 @@ from api import mongo, flask_bcrypt, jwt
 job_post = Blueprint("job_post", __name__)  # initialize blueprint
 postings = mongo.db.postings
 
+
 def return_exception(e):
     response_object = {
         "status": False,
@@ -35,7 +36,7 @@ def create_job():
             }
             return make_response(jsonify(response_object), 200)
         except Exception as e:
-            return_exception(e)
+            return make_response(return_exception(e), 400)
 
     else:
         response_object = {
@@ -75,7 +76,6 @@ def get_specific_posting(posting_id):
                 "message": 'Posting ID not found.'
             }
             return make_response(jsonify(response_object), 404)
-
 
         response_object = {
             "status": True,
