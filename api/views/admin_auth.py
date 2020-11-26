@@ -24,10 +24,10 @@ def register():
     if data['ok']:
         data = data['data']
         email = data["email"]
-        user_exists = users.find_one({
+        user = users.find_one({
             "email": email
         })
-        if not user_exists:
+        if user:
             response_object = {
                 "status": False,
                 "message": "User already exists."
@@ -62,6 +62,9 @@ def auth_user():
         user = users.find_one({
             "email": data["email"]
         })
+        if user is None:
+            response_object = {"status": False, "message": "Email does not exist."}
+            return make_response(jsonify(response_object), 401)
 
         if user and flask_bcrypt.check_password_hash(user['password'], data['password']):
             del user['password']
@@ -73,7 +76,7 @@ def auth_user():
             response_object = {"status": True, "data": user}
             return make_response(jsonify(response_object), 200)
         else:
-            response_object = {"status": False, "message": "Invalid username or password"}
+            response_object = {"status": False, "message": "Invalid password"}
             return make_response(jsonify(response_object), 401)
     else:
         response_object = {"status": False, "message": 'Bad request parameters: {}'.format(data['message'])}
@@ -84,7 +87,7 @@ def auth_user():
 def refresh():
     current_user = get_jwt_identity()
     ret = {
-            'token': create_access_token(identity=current_user)
+        'token': create_access_token(identity=current_user)
     }
     response_object = {"status": True, "data": ret}
     return make_response(jsonify(response_object), 200)
