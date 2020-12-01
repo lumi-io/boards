@@ -39,4 +39,4 @@ jobs:
         if [ -f requirements.txt ]; then pipenv install -r requirements.txt; fi
     - name: Unit test
       run: |
-        pytest
+        pipenv run pytest
