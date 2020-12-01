@@ -2,7 +2,7 @@
 
 Application Tracking System
 
-[![License](http://img.shields.io/badge/License-MIT-brightgreen.svg)](./LICENSE)
+[![License](http://img.shields.io/badge/License-MIT-brightgreen.svg)](./LICENSE) [![build Actions Status](https://github.com/lumi-io/boards/workflows/build/badge.svg)](https://github.com/lumi-io/boards/actions)
 
 ## Notes:
 
