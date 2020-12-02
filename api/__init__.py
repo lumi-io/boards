@@ -6,7 +6,6 @@ from flask_bcrypt import Bcrypt
 from flask import Flask
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
-from .config import Config, TestConfig
 
 
 class JSONEncoder(json.JSONEncoder):
