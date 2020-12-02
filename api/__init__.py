@@ -34,10 +34,19 @@ def create_app(test_config=False):
 
     app.config['JWT_SECRET_KEY'] = "test"
     app.json_encoder = JSONEncoder
-    # MongoDB Configuration
 
-    if test_config == True:
-        print("Testing configuration hit.")
+    configure_mongo_uri(app, test_config)  # MongoDB configuration
+    register_blueprints(app)  # Registering blueprints to Flask App
+
+    # register error Handler
+    # app.register_error_handler(Exception, all_exception_handler)
+
+    return app
+
+
+def configure_mongo_uri(app, test_config):
+    """ Helper function to configure MongoDB URI """
+    if test_config:
         app.config.from_pyfile('test_config.py')
     else:
         app.config.from_pyfile('config.py')
@@ -46,22 +55,16 @@ def create_app(test_config=False):
         ":"+app.config["MONGODB_PASSWORD"]+"@"+app.config["MONGODB_HOST"]
     try:
         mongo.init_app(app)
+        print("MongoDB connected.")
     except Exception as e:
         print(e)
 
-    print("MongoDB connected.")
 
-    # import and register blueprints
+def register_blueprints(app):
+    """ Helper function to register blueprints into Flask App """
     from api.views import main
     from api.views import admin_auth
-    # from api.views import filename here
 
-    # Why blueprints http://flask.pocoo.org/docs/1.0/blueprints/
     print("Registering Flask Blueprints.")
     app.register_blueprint(main.main)
     app.register_blueprint(admin_auth.admin_auth)
-
-    # register error Handler
-    # app.register_error_handler(Exception, all_exception_handler)
-
-    return app
