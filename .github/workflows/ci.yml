@@ -40,3 +40,9 @@ jobs:
     - name: Unit test
       run: |
         pipenv run pytest
+      env: 
+        MONGODB_TEST_DB: ${{ secrets.MONGODB_TEST_DB }}
+        MONGODB_TEST_HOST: ${{ secrets.MONGODB_TEST_HOST }}
+        MONGODB_TEST_PASSWORD: ${{ secrets.MONGODB_TEST_PASSWORD }} 
+        MONGODB_TEST_PORT: ${{ secrets.MONGODB_TEST_PORT }}
+        MONGODB_TEST_USERNAME: ${{ secrets.MONGODB_TEST_USERNAME }}
