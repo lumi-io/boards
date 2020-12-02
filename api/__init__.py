@@ -7,6 +7,7 @@ from flask import Flask
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
+
 class JSONEncoder(json.JSONEncoder):
     """ extend json-encoder class """
 
@@ -19,6 +20,7 @@ class JSONEncoder(json.JSONEncoder):
             return str(o)
         return json.JSONEncoder.default(self, o)
 
+
 # Objects and Instances to be used in other files are placed here
 mongo = PyMongo()
 app = Flask(__name__)
@@ -27,15 +29,18 @@ jwt = JWTManager(app)
 flask_bcrypt = Bcrypt(app)
 
 
-def create_app(test_config=None):
+def create_app(test_config=False):
     """ Initializes and adds necessary information into the Flask app object """
 
     app.config['JWT_SECRET_KEY'] = "test"
     app.json_encoder = JSONEncoder
     # MongoDB Configuration
-    print("Retrieving configuration variables.")
-    app.config.from_pyfile('config.py')
-    print("Connecting to MongoDB instance.")
+
+    if test_config == True:
+        print("Testing configuration hit.")
+        app.config.from_pyfile('test_config.py')
+    else:
+        app.config.from_pyfile('config.py')
 
     app.config["MONGO_URI"] = "mongodb+srv://"+app.config["MONGODB_USERNAME"] + \
         ":"+app.config["MONGODB_PASSWORD"]+"@"+app.config["MONGODB_HOST"]
