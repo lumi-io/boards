@@ -38,9 +38,11 @@ def create_app(test_config=False):
     # MongoDB Configuration
 
     if test_config == True:
+        from .config import TestConfig
         print("Testing configuration hit.")
         app.config.from_object(TestConfig())
     else:
+        from .config import Config
         app.config.from_object(Config())
 
     app.config["MONGO_URI"] = "mongodb+srv://"+app.config["MONGODB_USERNAME"] + \
