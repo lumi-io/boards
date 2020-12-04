@@ -50,6 +50,7 @@ def create_app(test_config=None):
     from api.views import main
     from api.views import admin_auth
     from api.views import job_post
+    from api.views import application
     # from api.views import filename here
 
     # Why blueprints http://flask.pocoo.org/docs/1.0/blueprints/
@@ -57,7 +58,7 @@ def create_app(test_config=None):
     app.register_blueprint(main.main)
     app.register_blueprint(admin_auth.admin_auth)
     app.register_blueprint(job_post.job_post)
-
+    app.register_blueprint(application.application)
     # register error Handler
     # app.register_error_handler(Exception, all_exception_handler)
 
