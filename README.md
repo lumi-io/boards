@@ -46,6 +46,14 @@ export FLASK_ENV=development
 flask run
 ```
 
+### To test the Flask Application
+
+First, ensure you have Docker downloaded (https://www.docker.com/products/docker-desktop)
+
+```bash
+make test-container
+```
+
 
 
 ### Documentation/Guides
