@@ -4,4 +4,4 @@ start-container:
 	docker run -d --name=testing_container -p 5000:5000 testing_container
 
 test-container: start-container
-	pytest
+	pipenv run pytest
