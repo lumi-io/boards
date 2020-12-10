@@ -2,7 +2,7 @@
 
 Application Tracking System
 
-[![License](http://img.shields.io/badge/License-MIT-brightgreen.svg)](./LICENSE) [![build Actions Status](https://github.com/lumi-io/boards/workflows/build/badge.svg)](https://github.com/lumi-io/boards/actions)
+[![License](http://img.shields.io/badge/License-MIT-brightgreen.svg)](./LICENSE) [![build Actions Status](https://github.com/lumi-io/boards/workflows/build/badge.svg)](https://github.com/lumi-io/boards/actions) [![made-with-python](https://img.shields.io/badge/Made%20with-Python-orange.svg)](https://www.python.org/)
 
 ## Notes:
 
