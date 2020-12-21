@@ -17,6 +17,8 @@ flask-jwt-extended = "*"
 flask-bcrypt = "*"
 jsonschema = "*"
 flask-pymongo = "*"
+boto3 = "*"
+importlib-metadata = "*"
 
 [requires]
 python_version = "3.7"

@@ -64,7 +64,9 @@ def register_blueprints(app):
     """ Helper function to register blueprints into Flask App """
     from api.views import main
     from api.views import admin_auth
+    from api.views import resume_parser_test
 
     print("Registering Flask Blueprints.")
     app.register_blueprint(main.main)
     app.register_blueprint(admin_auth.admin_auth)
+    app.register_blueprint(resume_parser_test.resume_parser_test)
