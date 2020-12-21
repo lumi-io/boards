@@ -8,8 +8,8 @@ resume_parser_test = Blueprint("resume_parser_test", __name__)
 def resume_parser():
     """
     1. Recieve resume as a file
-    2. Convert resume (PDF) into binary
-    3. Submit a POST request of binary data to https://emk9i3070g.execute-api.us-east-2.amazonaws.com/test/
+    2. Convert resume (PDF) into base64
+    3. Submit a POST request of base64 to https://emk9i3070g.execute-api.us-east-2.amazonaws.com/test/
        in the format of
        { 
            "body": {
