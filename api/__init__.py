@@ -62,18 +62,20 @@ def configure_mongo_uri(app, test_config):
 
 def register_blueprints(app):
     """ Helper function to register blueprints into Flask App """
-    from api.views import main
-    from api.views import admin_auth
-    from api.views import job_post
-    from api.views import application
+    from api.views.main import main
+    from api.views.admin_auth import admin_auth
+    from api.views.admin_postings import job_post
+    from api.views.application import application
+    from api.views.admin_applications import admin_applications
     # from api.views import filename here
 
     print("Registering Flask Blueprints.")
-    app.register_blueprint(main.main)
-    app.register_blueprint(admin_auth.admin_auth)
+    app.register_blueprint(main)
+    app.register_blueprint(admin_auth)
+    app.register_blueprint(job_post)
+    app.register_blueprint(application)
+    app.register_blueprint(admin_applications)
 
-    app.register_blueprint(job_post.job_post)
-    app.register_blueprint(application.application)
     # register error Handler
     # app.register_error_handler(Exception, all_exception_handler)
 
