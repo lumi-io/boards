@@ -12,7 +12,7 @@ python-dotenv = "*"
 pytest = "*"
 coverage = "*"
 flake8 = "*"
-pymongo = "*"
+pymongo = {extras = ["srv"], version = "*"}
 flask-jwt-extended = "*"
 flask-bcrypt = "*"
 jsonschema = "*"

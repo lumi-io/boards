@@ -2,7 +2,7 @@
 
 Application Tracking System
 
-[![License](http://img.shields.io/badge/License-MIT-brightgreen.svg)](./LICENSE)
+[![License](http://img.shields.io/badge/License-MIT-brightgreen.svg)](./LICENSE) [![build Actions Status](https://github.com/lumi-io/boards/workflows/build/badge.svg)](https://github.com/lumi-io/boards/actions) [![made-with-python](https://img.shields.io/badge/Made%20with-Python-orange.svg)](https://www.python.org/)
 
 ## Notes:
 
@@ -44,6 +44,14 @@ flask run
 export FLASK_APP=manage.py
 export FLASK_ENV=development
 flask run
+```
+
+### To test the Flask Application
+
+First, ensure you have Docker downloaded (https://www.docker.com/products/docker-desktop)
+
+```bash
+make test-container
 ```
 
 
