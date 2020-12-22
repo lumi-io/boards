@@ -7,6 +7,7 @@ from api import mongo, flask_bcrypt, jwt
 admin_auth = Blueprint("admin_auth", __name__)  # initialize blueprint
 users = mongo.db.users
 
+
 @jwt.unauthorized_loader
 def unauthorized_response(callback):
     response_object = {
@@ -14,6 +15,7 @@ def unauthorized_response(callback):
         "message": "Missing authorization header."
     }
     return make_response(jsonify(response_object), 401)
+
 
 @admin_auth.route('/admin/register', methods=['POST'])
 def register():
@@ -63,7 +65,8 @@ def auth_user():
             "email": data["email"]
         })
         if user is None:
-            response_object = {"status": False, "message": "Email does not exist."}
+            response_object = {"status": False,
+                               "message": "Email does not exist."}
             return make_response(jsonify(response_object), 401)
 
         if user and flask_bcrypt.check_password_hash(user['password'], data['password']):
@@ -72,15 +75,17 @@ def auth_user():
             refresh_token = create_refresh_token(identity=data)
             user['token'] = access_token
             user['refresh'] = refresh_token
-            
+
             response_object = {"status": True, "data": user}
             return make_response(jsonify(response_object), 200)
         else:
             response_object = {"status": False, "message": "Invalid password"}
             return make_response(jsonify(response_object), 401)
     else:
-        response_object = {"status": False, "message": 'Bad request parameters: {}'.format(data['message'])}
+        response_object = {
+            "status": False, "message": 'Bad request parameters: {}'.format(data['message'])}
         return make_response(jsonify(response_object), 400)
+
 
 @admin_auth.route('/admin/refresh', methods=['POST'])
 @jwt_refresh_token_required
