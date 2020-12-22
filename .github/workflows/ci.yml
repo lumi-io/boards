@@ -34,7 +34,7 @@ jobs:
     - name: Install dependencies with pipenv
       run: |
         pip install pipenv
-        pipenv install --deploy --dev
+        pipenv install
         pipenv install flake8 pytest
         if [ -f requirements.txt ]; then pipenv install -r requirements.txt; fi
     - name: Unit test
