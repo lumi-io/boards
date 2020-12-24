@@ -2,6 +2,8 @@ from flask import Blueprint, jsonify, request, make_response
 from api import mongo, flask_bcrypt, jwt
 from api.middlewares import upload_file
 
+import base64
+
 resume_parser_test = Blueprint("resume_parser_test", __name__)
 
 @resume_parser_test.route("/test/parse", methods=["POST"])
@@ -19,5 +21,9 @@ def resume_parser():
     4. Return payload
 
     """
+    # Code to convert a pdf file into base64Binary
+    # byte[] pdfBytes = File.ReadAllBytes(pdfPath)
+    # string pdfBase64 = Convrert.ToBase64String(pdfBytes)
+
     pass
 
