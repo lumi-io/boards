@@ -22,18 +22,53 @@ def return_exception(e):
 @admin_applications.route('/admin/postings/<posting_id>/applications', methods=['GET'])
 def read_all_applications(posting_id):
     """ Endpoint that gets all applications of a posting/job """
-    pass
+    try:
+        apps = applications.find_one({"postingKey": ObjectId(posting_id)})
+
+        response_object = {
+            "status": True,
+            "application": apps,
+            "message": 'All applications of posting ' + posting_id + ' received.'
+        }
+        return make_response(jsonify(response_object), 200)
+
+    except Exception as e:
+        return make_response(return_exception(e), 400)
 
 
 @admin_applications.route('/admin/postings/<posting_id>/applications/<applicant_id>', methods=['GET'])
 def read_specific_application(posting_id, applicant_id):
     """ Endpoint that gets a specific application of a posting """
-    pass
+    try:
+        apps = applications.find_one({"postingKey": ObjectId(posting_id)})
+        apps = apps["applications"]
+        for app in apps:
+            if ObjectId(applicant_id) == app["applicantId"]:
+                response_object = {
+                    "status": True,
+                    "application": app,
+                    "message": 'Application with id ' + posting_id + ' found.'
+                }
+
+                return make_response(jsonify(response_object), 200)
+        
+        response_object = {
+            "status": True,
+            "application": None,
+            "message": "No application found with the id " + applicant_id + "."
+        }
+
+        return make_response(jsonify(response_object), 204)
+
+    except Exception as e:
+        return make_response(return_exception(e), 400)
+
 
 @admin_applications.route('/admin/postings/<posting_id>/applications/<applicant_id>', methods=['PATCH'])
 def edit_specific_application(posting_id, applicant_id):
     """ Endpoint that edits a specific application of a posting """
     pass
+
 
 @admin_applications.route('/admin/postings/<posting_id>/applications/<applicant_id>', methods=['DELETE'])
 def delete_specific_application(posting_id, applicant_id):
