@@ -86,3 +86,40 @@ def get_specific_posting(posting_id):
 
     except Exception as e:
         return make_response(return_exception(e), 400)
+
+@job_post.route('/admin/postings/<posting_id>', methods=['PATCH'])
+def edit_specific_posting(posting_id, field, value):
+    """ Endpoint that edits a specific application of a posting """
+    try:
+        posting_info = postings.find_one({"_id": ObjectId(posting_id)})
+        if not posting_info:
+            response_object = {
+                "status": False,
+                "message": 'Posting ID not found.'
+            }
+            return make_response(jsonify(response_object), 404)
+
+        if postings.find( { field: { "$exists": False } } ):
+            response_object = {
+                "status": False,
+                "message": 'Field not found.'
+            }
+            return make_response(jsonify(response_object), 404)
+
+        postings.update(
+            { "_id": posting_id},
+            { "$set": {[field]: value}}
+        )
+        response_object = {
+            "status": True,
+            "message": 'Posting updated.'
+        }
+        return make_response(jsonify(response_object), 200)
+
+    except Exception as e:
+        return make_response(return_exception(e), 400
+
+@job_post.route('/admin/postings/<posting_id>', methods=['DELETE'])
+def delete_specific_posting(posting_id):
+    """ Endpoint that deletes a specific application of a posting """
+    pass 
