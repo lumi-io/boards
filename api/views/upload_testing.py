@@ -1,5 +1,5 @@
 import boto3
-from config import S3_BUCKET, S3_KEY, S3_SECRET
+from api.config import S3_BUCKET, S3_KEY, S3_SECRET
 from flask import session
 
 #interact with bucket
