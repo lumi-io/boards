@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request, make_response
 from bson.objectid import ObjectId
-# from flask_jwt_extended import (create_access_token, create_refresh_token,
-#                                 jwt_required, jwt_refresh_token_required, get_jwt_identity)
+from flask_jwt_extended import (create_access_token, create_refresh_token,
+                                jwt_required, jwt_refresh_token_required, get_jwt_identity)
 from api.validators.job_post import validate_job
 from api import mongo, flask_bcrypt, jwt
 
@@ -20,6 +20,7 @@ def return_exception(e):
 
 
 @admin_applications.route('/admin/postings/<posting_id>/applications', methods=['GET'])
+@jwt_required
 def read_all_applications(posting_id):
     """ Endpoint that gets all applications of a posting/job """
     try:
@@ -37,6 +38,7 @@ def read_all_applications(posting_id):
 
 
 @admin_applications.route('/admin/postings/<posting_id>/applications/<applicant_id>', methods=['GET'])
+@jwt_required
 def read_specific_application(posting_id, applicant_id):
     """ Endpoint that gets a specific application of a posting """
     try:
@@ -71,6 +73,7 @@ def edit_specific_application(posting_id, applicant_id):
 
 
 @admin_applications.route('/admin/postings/<posting_id>/applications/<applicant_id>', methods=['DELETE'])
+@jwt_required
 def delete_specific_application(posting_id, applicant_id):
     """ Endpoint that deletes a specific application of a posting """
     try:
