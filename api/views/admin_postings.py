@@ -87,7 +87,7 @@ def get_specific_posting(posting_id):
     except Exception as e:
         return make_response(return_exception(e), 400)
 
-@job_post.route.route('/admin/postings/<posting_id>/delete', methods=['DELETE'])
+@job_post.route('/admin/postings/<posting_id>', methods=['DELETE'])
 def delete_specific_posting(posting_id):
     try:
         delete_response = postings.remove({"postingKey": ObjectId(posting_id)})
