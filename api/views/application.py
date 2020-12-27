@@ -76,9 +76,17 @@ def upload(acl="public-read"):
         }
         return make_response(jsonify(response_object), 400)
 
+#should be put in the admin router
+@application.route('/user/applications/<bucket_name>', methods=['POST'])    
+def delete_all(bucket_name):
+    try:
+        s3_client = boto3.client('s3')
+        files = s3_client.list_objects(Bucket=bucket_name)['Contents']
+        for file in files:
+            s3_client.delete_objects(Bucket=bucket_name, Key=file["Key"])
     
-
-    
+    except Exception as e:
+            return make_response(return_exception(e), 400)
 
 
 

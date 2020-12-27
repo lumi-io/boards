@@ -14,7 +14,7 @@ application_schema = {
         "name": {
             "type": "string",
         },
-        "avatar": {
+        "profile-pic": {
             "type": "string"
         },
         "graduating_year": {
@@ -35,10 +35,10 @@ application_schema = {
         "college": {
             "type": "array"
         },
-        "Resume": {
+        "resume": {
             "type": "string"
         },
-        "URLs": {
+        "elavator-pitch": {
             "type": "string"
         },
         "other_URL": {
@@ -55,7 +55,7 @@ application_schema = {
         }
     },
     "required": ["application_status"],
-    #, "time_applied", "name", "avatar", "graduating_year", "phone_number", "GPA", "major", "college", "Resume", "URLs", "other_URL", "Q&A", "email", "role"
+    #, "time_applied", "name", "profile-pic", "graduating_year", "phone_number", "GPA", "major", "college", "resume", "elevator-pitch", "other_URL", "Q&A", "email", "role"
     "additionalProperties": False
 }
 

@@ -86,3 +86,23 @@ def get_specific_posting(posting_id):
 
     except Exception as e:
         return make_response(return_exception(e), 400)
+
+@job_post.route.route('/admin/postings/<posting_id>/delete', methods=['DELETE'])
+def delete_specific_posting(posting_id):
+    try:
+        delete_response = postings.remove({"postingKey": ObjectId(posting_id)})
+        if not delete_response:
+            response_object = {
+                "status": False,
+                "message": 'Delete unsuccessful. Posting ID not found.'
+            }
+            return make_response(jsonify(response_object), 404)
+
+        response_object = {
+            "status": True,
+            "message": "Posting " + posting_id + " deleted."
+        }
+        return make_response(jsonify(response_object), 200)
+
+    except Exception as e:
+        return make_response(return_exception(e), 400)
