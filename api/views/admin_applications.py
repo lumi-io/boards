@@ -67,9 +67,37 @@ def read_specific_application(posting_id, applicant_id):
 
 
 @admin_applications.route('/admin/postings/<posting_id>/applications/<applicant_id>', methods=['PATCH'])
+@jwt_required
 def edit_specific_application(posting_id, applicant_id):
     """ Endpoint that edits a specific application of a posting """
-    pass
+    try:
+        updated_data = request.get_json()
+        updated_data["applicantId"] = ObjectId(applicant_id)
+        update_response = applications.find_and_modify(
+            query = {
+                "postingKey": ObjectId(posting_id),
+                "applications.applicantId": ObjectId(applicant_id)
+            },
+            update = {"$set": {
+                "applications.$": updated_data
+            }}
+        )
+        if update_response is None:
+            response_object = {
+                "status": True,
+                "message": "No application found with the id " + applicant_id + "."
+            }
+            return make_response(jsonify(response_object), 200)
+
+        response_object = {
+            "status": True,
+            "message": "Edited application with id " + applicant_id + "."
+        }
+
+        return make_response(jsonify(response_object), 200)
+
+    except Exception as e:
+        return make_response(return_exception(e), 400)
 
 
 @admin_applications.route('/admin/postings/<posting_id>/applications/<applicant_id>', methods=['DELETE'])
