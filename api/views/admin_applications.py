@@ -73,12 +73,14 @@ def edit_specific_application(posting_id, applicant_id):
     try:
         updated_data = request.get_json()
         updated_data["applicantId"] = ObjectId(applicant_id)
+
+        # Searches based on query and overwrites all the data from scratch with input data
         update_response = applications.find_and_modify(
-            query = {
+            query={
                 "postingKey": ObjectId(posting_id),
                 "applications.applicantId": ObjectId(applicant_id)
             },
-            update = {"$set": {
+            update={"$set": {
                 "applications.$": updated_data
             }}
         )
