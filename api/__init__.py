@@ -27,6 +27,7 @@ app = Flask(__name__)
 # https://flask-jwt-extended.readthedocs.io/en/stable/api/
 jwt = JWTManager(app)
 flask_bcrypt = Bcrypt(app)
+blacklist = set()
 
 
 def create_app(test_config=False):
