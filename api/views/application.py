@@ -72,7 +72,7 @@ def upload(acl="public-read"):
     else:
         response_object = {
             "status": False,
-            "message": 'Bad request parameters: {}'.format(data['message'])
+            "message": 'Bad request parameters: {}'
         }
         return make_response(jsonify(response_object), 400)
 
