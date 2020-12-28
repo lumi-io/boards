@@ -5,6 +5,7 @@ from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from flask import Flask
 from flask_pymongo import PyMongo
+from flask_cors import CORS
 from bson.objectid import ObjectId
 
 
@@ -24,7 +25,7 @@ class JSONEncoder(json.JSONEncoder):
 # Objects and Instances to be used in other files are placed here
 mongo = PyMongo()
 app = Flask(__name__)
-# https://flask-cors.readthedocs.io/en/latest/ - to be used for CORS if needed
+CORS(app)
 # https://flask-jwt-extended.readthedocs.io/en/stable/api/
 jwt = JWTManager(app)
 flask_bcrypt = Bcrypt(app)
