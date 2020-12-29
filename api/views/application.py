@@ -21,10 +21,9 @@ def return_exception(e):
 @application.route('/user/applications/upload', methods=['POST'])
 def upload(acl="public-read"):
     resume_file = request.files['resume']
-    profile_pic_file = request.files['profile-pic']
-    video_file = request.files['elevator-pitch']
+    profile_pic_file = request.files['profilePic']
+    video_file = request.files['elevatorPitch']
     s3_client = boto3.client('s3')
-    success = 'files uploaded.'
     if resume_file:
         try:
             file = resume_file
@@ -64,7 +63,7 @@ def upload(acl="public-read"):
                 })
             response_object = {
                         "status": True,
-                        "message": success
+                        "message": 'files uploaded.'
             }
             return make_response(jsonify(response_object), 200)
         except Exception as e:
