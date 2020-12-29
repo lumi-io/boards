@@ -1,6 +1,8 @@
 from flask import Blueprint, jsonify, request, make_response
 from api import mongo, flask_bcrypt, jwt
 from api.middlewares import upload_file
+
+import PyPDF2
 import base64
 
 resume_parser_test = Blueprint("resume_parser_test", __name__)
@@ -19,6 +21,10 @@ def resume_parser():
        }
     4. Return payload
     """
+    
+    # Receiving Resume as a PDF file
+    pdfFileObj = open('resume.pdf', 'rb')           # Creating a pdf file object
+    pdfReader = PyPDF2.PdfFileReader(pdfFileObj)    # Creating a pdf reader object
 
     # Convert a pdf file into base64Binary
     with open("resume.pdf", "rb") as pdf_file:
