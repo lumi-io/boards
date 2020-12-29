@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request, make_response
 from bson.objectid import ObjectId
-# from flask_jwt_extended import (create_access_token, create_refresh_token,
-#                                 jwt_required, jwt_refresh_token_required, get_jwt_identity)
+from flask_jwt_extended import (create_access_token, create_refresh_token,
+                                jwt_required, jwt_refresh_token_required, get_jwt_identity)
 from api.validators.job_post import validate_job
 from api import mongo, flask_bcrypt, jwt
 
@@ -18,6 +18,7 @@ def return_exception(e):
 
 
 @job_post.route('/admin/postings/create', methods=['POST'])
+@jwt_required
 def create_posting():
     """ Endpoint to create a new job posting """
     # Validates if the format is correct
@@ -47,6 +48,7 @@ def create_posting():
 
 
 @job_post.route('/admin/postings', methods=['GET'])
+@jwt_required
 def read_all_postings():
     """ Endpoint that gets all titles to be read by the default page """
     all_postings = []
@@ -66,6 +68,7 @@ def read_all_postings():
 
 
 @job_post.route('/admin/postings/<posting_id>', methods=['GET'])
+@jwt_required
 def read_specific_posting(posting_id):
     """ Endpoint that gets information of specific job post based on id """
     try:
@@ -88,6 +91,7 @@ def read_specific_posting(posting_id):
         return make_response(return_exception(e), 400)
 
 @job_post.route('/admin/postings/<posting_id>', methods=['PATCH'])
+@jwt_required
 def update_specific_posting(posting_id, field, value):
     """ Endpoint that edits a specific posting """
     try:
@@ -116,6 +120,7 @@ def update_specific_posting(posting_id, field, value):
         return make_response(return_exception(e), 400)
 
 @job_post.route('/admin/postings/<posting_id>', methods=['DELETE'])
+@jwt_required
 def delete_specific_posting(posting_id):
     """ Endpoint that deletes a specific posting """
     try:
@@ -128,6 +133,18 @@ def delete_specific_posting(posting_id):
                 "message": 'Posting with id ' + posting_id + ' not found.'
             }
             return make_response(jsonify(response_object), 404)
+
+        # updated_data = request.get_json()
+
+        # # Searches based on query and overwrites all the data from scratch with input data
+        # update_response = applications.find_and_modify(
+        #     query={
+        #         "postingKey": ObjectId(posting_id),
+        #     },
+        #     update={"$set": {
+        #         "postings.$": updated_data
+        #     }}
+        # )
 
         response_object = {
             "status": True,
