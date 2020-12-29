@@ -14,7 +14,7 @@ application_schema = {
         "name": {
             "type": "string",
         },
-        "profile-pic": {
+        "profilePic": {
             "type": "string"
         },
         "graduating_year": {
@@ -38,7 +38,7 @@ application_schema = {
         "resume": {
             "type": "string"
         },
-        "elavator-pitch": {
+        "elavatorPitch": {
             "type": "string"
         },
         "other_URL": {

@@ -88,7 +88,6 @@ def delete_all(bucket_name):
             return make_response(return_exception(e), 400)
 
 
-
 @application.route('/user/applications/create', methods=['POST'])
 def create_application():
     """ Endpoint to create a new job posting """
