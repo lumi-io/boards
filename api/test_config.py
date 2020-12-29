@@ -9,3 +9,8 @@ MONGODB_HOST = os.getenv('MONGODB_TEST_HOST')
 MONGODB_PORT = int(os.getenv('MONGODB_TEST_PORT'))
 MONGODB_USERNAME = os.getenv('MONGODB_TEST_USERNAME')
 MONGODB_PASSWORD = os.getenv('MONGODB_TEST_PASSWORD')
+
+#s3 bucket access
+S3_KEY = os.getenv("AWS_KEY")
+S3_BUCKET= 'resume-testing-ats'
+S3_SECRET= os.getenv("AWS_SECRET_ACCESS_KEY")

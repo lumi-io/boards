@@ -4,7 +4,7 @@ from bson.objectid import ObjectId
 #                                 jwt_required, jwt_refresh_token_required, get_jwt_identity)
 from api.validators.application import validate_application
 from api import mongo, flask_bcrypt, jwt
-from api.views.upload_testing import get_bucket, get_buckets_list
+# from api.views.upload_testing import get_bucket, get_buckets_list
 import boto3
 
 application = Blueprint("application", __name__)  # initialize blueprint
