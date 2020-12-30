@@ -3,6 +3,8 @@ from flask_jwt_extended import (create_access_token, create_refresh_token,
                                 jwt_required, jwt_refresh_token_required, get_jwt_identity)
 from api.validators.user import validate_user
 from api import mongo, flask_bcrypt, jwt
+from api.middlewares.confirmation_email import send_confirmation_email
+import uuid
 
 admin_auth = Blueprint("admin_auth", __name__)  # initialize blueprint
 users = mongo.db.users
@@ -40,6 +42,12 @@ def register():
             data['password']
         )
 
+        email_confirmation_id = str(uuid.uuid4())
+        data["email_confirmation_id"] = email_confirmation_id
+        data["email_confirmed"] = False
+
+        send_confirmation_email(email, email_confirmation_id)
+
         mongo.db.users.insert_one(data)
         response_object = {
             "status": True,
@@ -55,6 +63,19 @@ def register():
         return make_response(jsonify(response_object), 400)
 
 
+@admin_auth.route('/confirmation/<confirmation_id>', methods=['GET'])
+def confirm_registration(confirmation_id):
+    user = users.update(
+        {"email_confirmation_id": confirmation_id},
+        {
+            "$set": {"email_confirmed": True},
+            "$unset": {"email_confirmation_id": ""}
+        },
+        upsert=False
+    )
+    return "Email confirmed"
+
+
 @admin_auth.route('/admin/auth', methods=['POST'])
 def auth_user():
     """ Endpoint to authorize users """
@@ -67,6 +88,13 @@ def auth_user():
         if user is None:
             response_object = {"status": False,
                                "message": "Email does not exist."}
+            return make_response(jsonify(response_object), 401)
+
+        if not user["email_confirmed"]:
+            response_object = {
+                "status": False,
+                "message": "Registration incomplete. User has not confirmed their email."
+            }
             return make_response(jsonify(response_object), 401)
 
         if user and flask_bcrypt.check_password_hash(user['password'], data['password']):
