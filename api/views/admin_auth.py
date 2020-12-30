@@ -49,6 +49,16 @@ def register():
 
         send_confirmation_email(email, email_confirmation_id)
 
+        try:
+            send_confirmation_email(email, email_confirmation_id)
+
+        except Exception as e:
+            response_object = {
+                "status": False,
+                "message": e.response['Error']['Message']
+            }
+            return make_response(jsonify(response_object), 400)
+
         mongo.db.users.insert_one(data)
         response_object = {
             "status": True,
