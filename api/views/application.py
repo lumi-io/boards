@@ -18,7 +18,7 @@ def return_exception(e):
     }
     return jsonify(response_object)
 
-@application.route('/user/applications/upload', methods=['POST'])
+# @application.route('/user/applications/upload', methods=['POST'])
 def upload(acl="public-read"):
     resume_file = request.files['resume']
     profile_pic_file = request.files['profilePic']
@@ -88,9 +88,9 @@ def delete_all(bucket_name):
             return make_response(return_exception(e), 400)
 
 
-@application.route('/user/applications/create', methods=['POST'])
-def create_application():
-    """ Endpoint to create a new job posting """
+@application.route('/user/applications/create/<posting_id>', methods=['POST'])
+def create_application(posting_id):
+    """ Endpoint to create a new application """
     # Validates if the format is correct
     data = validate_application(request.get_json())
 
@@ -104,6 +104,7 @@ def create_application():
                 "status": True,
                 "message": 'Application submitted.'
             }
+            # upload()
             return make_response(jsonify(response_object), 200)
         except Exception as e:
             return make_response(return_exception(e), 400)
