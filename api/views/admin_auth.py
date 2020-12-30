@@ -5,6 +5,7 @@ from api.validators.user import validate_user, validate_email
 from api import mongo, flask_bcrypt, jwt
 from api.middlewares.confirmation_email import send_confirmation_email
 import uuid
+from botocore.exceptions import ClientError
 
 admin_auth = Blueprint("admin_auth", __name__)  # initialize blueprint
 users = mongo.db.users
@@ -107,7 +108,7 @@ def resend_confirmation():
                 "message": "Email not found. Please register a new account."
             }
             return make_response(jsonify(response_object), 400)
-        
+
         if user["email_confirmed"]:
             response_object = {
                 "status": False,
@@ -115,8 +116,10 @@ def resend_confirmation():
             }
             return make_response(jsonify(response_object), 400)
 
+        # Generates a new UUID
         new_confirmation_id = str(uuid.uuid4())
 
+        # Updated the new UUID in the DB
         user = users.update(
             {"email": email},
             {
@@ -124,13 +127,22 @@ def resend_confirmation():
             },
             upsert=False
         )
-        send_confirmation_email(email, new_confirmation_id)
 
-        response_object = {
-            "status": True,
-            "message": 'Resent verification/confirmation email.'
-        }
-        return make_response(jsonify(response_object), 200)
+        try:
+            send_confirmation_email(email, new_confirmation_id)
+            response_object = {
+                "status": True,
+                "message": 'Resent verification/confirmation email.'
+            }
+            return make_response(jsonify(response_object), 200)
+        
+        except Exception as e:
+            response_object = {
+                "status": False,
+                "message": e.response['Error']['Message']
+            }
+            return make_response(jsonify(response_object), 400)
+
 
     else:
         response_object = {
@@ -138,7 +150,6 @@ def resend_confirmation():
             "message": 'Bad request parameters: {}'.format(data['message'])
         }
         return make_response(jsonify(response_object), 400)
-
 
 
 @admin_auth.route('/admin/auth', methods=['POST'])
