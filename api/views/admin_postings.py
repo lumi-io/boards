@@ -5,8 +5,11 @@ from flask_jwt_extended import (create_access_token, create_refresh_token,
 from api.validators.job_post import validate_job
 from api import mongo, flask_bcrypt, jwt
 
+import json
+
 job_post = Blueprint("job_post", __name__)  # initialize blueprint
 postings = mongo.db.postings
+applications = mongo.db.applications
 
 
 def return_exception(e):
@@ -30,7 +33,14 @@ def create_posting():
         # By default, there should be no applications inside a job post
         data["application"] = []
         try:
-            postings.insert_one(data)
+            # Inserts new posting doc in posting collection
+            posting_id = postings.insert_one(data)
+            # Creates corresponding application data with posting doc id
+            app_doc = {"postingKey": posting_id, "applications": []}
+            json_dump = json.dumps(app_doc)
+            json_object = json.loads(json_dump)
+            # Inserts corresponding application doc in applications collection
+            applications.insert_one(json_object)
             response_object = {
                 "status": True,
                 "message": 'New job post created successfully.'
@@ -92,17 +102,32 @@ def read_specific_posting(posting_id):
 
 @job_post.route('/admin/postings/<posting_id>', methods=['PATCH'])
 @jwt_required
-def update_specific_posting(posting_id, field, value):
+def edit_specific_posting(posting_id, field, value):
     """ Endpoint that edits a specific posting """
     try:
         update_response = postings.findAndModify(
+            # Finds posting doc based on posting_id
             query = {
                 "_id": ObjectId(posting_id)
             },
+            # Updates field in doc with given value
             update = { 
                 "$set": {[field]: value} 
             } 
         )
+
+        # # Searches based on query and overwrites all the data from scratch with input data
+
+        # updated_data = request.get_json()
+        # update_response = applications.find_and_modify(
+        #     query={
+        #         "postingKey": ObjectId(posting_id),
+        #     },
+        #     update={"$set": {
+        #         "postings.$": updated_data
+        #     }}
+        # )
+
         if update_response is None:
             response_object = {
                 "status": False,
@@ -124,6 +149,7 @@ def update_specific_posting(posting_id, field, value):
 def delete_specific_posting(posting_id):
     """ Endpoint that deletes a specific posting """
     try:
+        # Finds and deletes posting doc with given id
         deleted_doc = postings.findOneAndDelete(
             { "_id": ObjectId(posting_id) }
         )
@@ -133,18 +159,6 @@ def delete_specific_posting(posting_id):
                 "message": 'Posting with id ' + posting_id + ' not found.'
             }
             return make_response(jsonify(response_object), 404)
-
-        # updated_data = request.get_json()
-
-        # # Searches based on query and overwrites all the data from scratch with input data
-        # update_response = applications.find_and_modify(
-        #     query={
-        #         "postingKey": ObjectId(posting_id),
-        #     },
-        #     update={"$set": {
-        #         "postings.$": updated_data
-        #     }}
-        # )
 
         response_object = {
             "status": True,
