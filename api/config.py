@@ -10,6 +10,11 @@ MONGODB_PORT = int(os.getenv('MONGODB_PORT'))
 MONGODB_USERNAME = os.getenv('MONGODB_USERNAME')
 MONGODB_PASSWORD = os.getenv('MONGODB_PASSWORD')
 
+#s3 bucket access
+S3_KEY = os.getenv("AWS_KEY")
+S3_BUCKET= 'resume-testing-ats'
+S3_SECRET= os.getenv("AWS_SECRET_ACCESS_KEY")
+
 # class ProdConfig(Config):
 #     FLASK_ENV = 'production'
 #     DEBUG = False

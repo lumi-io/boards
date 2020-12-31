@@ -18,6 +18,7 @@ flask-bcrypt = "*"
 jsonschema = "*"
 flask-pymongo = "*"
 dnspython = "*"
+boto3 = "*"
 flask-cors = "*"
 
 [requires]
