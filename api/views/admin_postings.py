@@ -31,16 +31,13 @@ def create_posting():
         data = data['data']
 
         # By default, there should be no applications inside a job post
-        data["application"] = []
         try:
             # Inserts new posting doc in posting collection
             posting_id = postings.insert_one(data)
             # Creates corresponding application data with posting doc id
-            app_doc = {"postingKey": posting_id, "applications": []}
-            json_dump = json.dumps(app_doc)
-            json_object = json.loads(json_dump)
+            app_doc = {"postingKey": ObjectId(posting_id.inserted_id), "applications": []}
             # Inserts corresponding application doc in applications collection
-            applications.insert_one(json_object)
+            applications.insert_one(app_doc)
             response_object = {
                 "status": True,
                 "message": 'New job post created successfully.'
@@ -54,11 +51,11 @@ def create_posting():
             "status": False,
             "message": 'Bad request parameters: {}'.format(data['message'])
         }
-        return make_response(jsonify(response_object), 400)
+        return make_response(jsonify(response_object), 200)
 
 
 @job_post.route('/admin/postings', methods=['GET'])
-@jwt_required
+# @jwt_required
 def read_all_postings():
     """ Endpoint that gets all titles to be read by the default page """
     all_postings = []
@@ -88,7 +85,7 @@ def read_specific_posting(posting_id):
                 "status": False,
                 "message": 'Posting ID not found.'
             }
-            return make_response(jsonify(response_object), 404)
+            return make_response(jsonify(response_object), 200)
 
         response_object = {
             "status": True,
@@ -101,24 +98,25 @@ def read_specific_posting(posting_id):
         return make_response(return_exception(e), 400)
 
 @job_post.route('/admin/postings/<posting_id>', methods=['PATCH'])
-@jwt_required
-def edit_specific_posting(posting_id, field, value):
+# @jwt_required
+def edit_specific_posting(posting_id):
     """ Endpoint that edits a specific posting """
     try:
-        update_response = postings.findAndModify(
+        updated_data = request.get_json()
+        update_response = postings.update_one(
             # Finds posting doc based on posting_id
-            query = {
+            filter = {
                 "_id": ObjectId(posting_id)
             },
             # Updates field in doc with given value
             update = { 
-                "$set": {[field]: value} 
+                "$set": {updated_data['field']: updated_data['value']} 
+                # FIX: check isVisible data type
             } 
         )
 
         # # Searches based on query and overwrites all the data from scratch with input data
 
-        # updated_data = request.get_json()
         # update_response = applications.find_and_modify(
         #     query={
         #         "postingKey": ObjectId(posting_id),
@@ -133,7 +131,7 @@ def edit_specific_posting(posting_id, field, value):
                 "status": False,
                 "message": 'Posting with id ' + posting_id + ' not found.'
             }
-            return make_response(jsonify(response_object), 404)
+            return make_response(jsonify(response_object), 200)
 
         response_object = {
             "status": True,
@@ -150,7 +148,7 @@ def delete_specific_posting(posting_id):
     """ Endpoint that deletes a specific posting """
     try:
         # Finds and deletes posting doc with given id
-        deleted_doc = postings.findOneAndDelete(
+        deleted_doc = postings.delete_one(
             { "_id": ObjectId(posting_id) }
         )
         if deleted_doc is None:
@@ -158,7 +156,7 @@ def delete_specific_posting(posting_id):
                 "status": False,
                 "message": 'Posting with id ' + posting_id + ' not found.'
             }
-            return make_response(jsonify(response_object), 404)
+            return make_response(jsonify(response_object), 200)
 
         response_object = {
             "status": True,
