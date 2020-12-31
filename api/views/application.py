@@ -88,18 +88,26 @@ def delete_all(bucket_name):
             return make_response(return_exception(e), 400)
 
 
-@application.route('/user/applications/create/<posting_id>', methods=['POST'])
-def create_application(posting_id):
-    """ Endpoint to create a new application """
+# upload to mongodb in a correct format
+# upload both at the same time
+@application.route('/user/applications/submit/<posting_id>', methods=['POST'])
+def submit_application(posting_id):
+    """ Endpoint to append an application to a job posting """
     # Validates if the format is correct
-    data = validate_application(request.get_json())
+    print(request.form['json'])
+    data = validate_application(JSON.stringify(request.form['json']))
 
     if data['ok']:
         data = data['data']
 
         # By default, there should be no applications inside a job post
         try:
-            applications.insert_one(data)
+            applications.update(
+                {"postingKey": ObjectId(posting_id)},
+                { "$push" : 
+                    {"applications": data }
+                }
+            )
             response_object = {
                 "status": True,
                 "message": 'Application submitted.'
