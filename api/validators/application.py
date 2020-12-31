@@ -7,22 +7,22 @@ application_schema = {
     "properties": {
         "applicant_id": {
         },
-        "application_status": {
+        "applicationStatus": {
             "type": "string"
         },
-        "time_applied": {
+        "timeApplied": {
             "type": "string" #datatime??
         },
-        "applicant_name": {
+        "applicantName": {
             "type": "string",
         },
         "profilePic": {
             "type": "string"
         },
-        "graduating_year": {
+        "graduatingYear": {
             "type": "integer"
         },
-        "phone_number": {
+        "phoneNumber": {
             "type": "string"
         },
         "GPA": {
@@ -40,7 +40,7 @@ application_schema = {
         "resume": {
             "type": "string"
         },
-        "elavatorPitch": {
+        "elevatorPitch": {
             "type": "string"
         },
         "other_URL": {
@@ -56,7 +56,7 @@ application_schema = {
             "type": "string"
         }
     },
-    "required": ["application_status", "resume", "elavatorPitch", "profilePic", "applicant_name", "graduating_year", "phone_number", "GPA", "major", "college", "email", "role"],
+    "required": ["applicationStatus", "resume", "elevatorPitch", "profilePic", "applicantName", "graduatingYear", "phoneNumber", "GPA", "major", "college", "email", "role"],
     #, "time_applied", "Q&A"
     "additionalProperties": False
 }

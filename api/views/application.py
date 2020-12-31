@@ -96,7 +96,7 @@ def update_filenames(posting_id, applicant_id, urls):
         update={
             "resume": urls[0],
             "profilePic": urls[1],
-            "elavatorPitch": urls[2]
+            "elevatorPitch": urls[2]
         }
     )
     return True
@@ -111,7 +111,7 @@ def submit_application(posting_id):
     json_object = json.loads(json_dump)
     data = validate_application(json_object)
     data['data']["application_id"] = ObjectId()
-    data['data']['time_applied'] = ctime(time())
+    data['data']['timeApplied'] = ctime(time())
 
 
     #required files
@@ -130,7 +130,7 @@ def submit_application(posting_id):
     
     data['data']["resume"] = urls[0]
     data['data']["profilePic"] = urls[1]
-    data['data']["elavatorPitch"] = urls[2]
+    data['data']["elevatorPitch"] = urls[2]
 
     if data['ok']:
         data = data['data']
