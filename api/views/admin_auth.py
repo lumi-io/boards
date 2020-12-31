@@ -1,11 +1,18 @@
 from flask import Blueprint, jsonify, request, make_response
 from flask_jwt_extended import (create_access_token, create_refresh_token,
-                                jwt_required, jwt_refresh_token_required, get_jwt_identity)
+                                jwt_required, jwt_refresh_token_required, get_jwt_identity,
+                                get_raw_jwt)
 from api.validators.user import validate_user
-from api import mongo, flask_bcrypt, jwt
+from api import mongo, flask_bcrypt, jwt, blacklist
 
 admin_auth = Blueprint("admin_auth", __name__)  # initialize blueprint
 users = mongo.db.users
+
+
+@jwt.token_in_blacklist_loader
+def check_if_token_in_blacklist(decrypted_token):
+    jti = decrypted_token['jti']
+    return jti in blacklist
 
 
 @jwt.unauthorized_loader
@@ -55,8 +62,8 @@ def register():
         return make_response(jsonify(response_object), 400)
 
 
-@admin_auth.route('/admin/auth', methods=['POST'])
-def auth_user():
+@admin_auth.route('/admin/login', methods=['POST'])
+def login_user():
     """ Endpoint to authorize users """
     data = validate_user(request.get_json())
     if data['ok']:
@@ -96,3 +103,19 @@ def refresh():
     }
     response_object = {"status": True, "data": ret}
     return make_response(jsonify(response_object), 200)
+
+
+@admin_auth.route('/admin/logout', methods=['DELETE'])
+@jwt_required
+def logout():
+    try:
+        jti = get_raw_jwt()['jti']
+        blacklist.add(jti)
+        response_object = {
+            "status": True,
+            "message": "Succesfully logged out"
+        }
+        return make_response(jsonify(response_object), 200)
+
+    except Exception as e:
+        print(e)
