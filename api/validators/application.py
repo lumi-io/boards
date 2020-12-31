@@ -5,13 +5,15 @@ from jsonschema.exceptions import SchemaError
 application_schema = {
     "type": "object",
     "properties": {
+        "applicant_id": {
+        },
         "application_status": {
             "type": "string"
         },
         "time_applied": {
             "type": "string" #datatime??
         },
-        "name": {
+        "applicant_name": {
             "type": "string",
         },
         "profilePic": {
@@ -33,7 +35,7 @@ application_schema = {
             "type": "string"
         },
         "college": {
-            "type": "array"
+            "type": "string"
         },
         "resume": {
             "type": "string"
@@ -54,8 +56,8 @@ application_schema = {
             "type": "string"
         }
     },
-    "required": ["application_status"],
-    #, "time_applied", "name", "profile-pic", "graduating_year", "phone_number", "GPA", "major", "college", "resume", "elevator-pitch", "other_URL", "Q&A", "email", "role"
+    "required": ["application_status", "resume", "elavatorPitch", "profilePic", "applicant_name", "graduating_year", "phone_number", "GPA", "major", "college", "email", "role"],
+    #, "time_applied", "Q&A"
     "additionalProperties": False
 }
 

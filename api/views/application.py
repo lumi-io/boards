@@ -6,6 +6,8 @@ from api.validators.application import validate_application
 from api import mongo, flask_bcrypt, jwt
 # from api.views.upload_testing import get_bucket, get_buckets_list
 import boto3
+import json
+from time import time, ctime
 
 application = Blueprint("application", __name__)  # initialize blueprint
 applications = mongo.db.applications
@@ -19,10 +21,7 @@ def return_exception(e):
     return jsonify(response_object)
 
 # @application.route('/user/applications/upload', methods=['POST'])
-def upload(acl="public-read"):
-    resume_file = request.files['resume']
-    profile_pic_file = request.files['profilePic']
-    video_file = request.files['elevatorPitch']
+def upload(resume_file, profile_pic_file, video_file, acl="public-read"):
     s3_client = boto3.client('s3')
     if resume_file:
         try:
@@ -88,14 +87,50 @@ def delete_all(bucket_name):
             return make_response(return_exception(e), 400)
 
 
+def update_filenames(posting_id, applicant_id, urls):
+    applications.find_and_modify(
+        query={
+            "postingKey": ObjectId(posting_id),
+            "applications.applicantId": ObjectId(applicant_id)
+        },
+        update={
+            "resume": urls[0],
+            "profilePic": urls[1],
+            "elavatorPitch": urls[2]
+        }
+    )
+    return True
+
 # upload to mongodb in a correct format
 # upload both at the same time
 @application.route('/user/applications/submit/<posting_id>', methods=['POST'])
 def submit_application(posting_id):
     """ Endpoint to append an application to a job posting """
     # Validates if the format is correct
-    print(request.form['json'])
-    data = validate_application(JSON.stringify(request.form['json']))
+    json_dump = json.dumps(eval(request.form['json']))
+    json_object = json.loads(json_dump)
+    data = validate_application(json_object)
+    data['data']["application_id"] = ObjectId()
+    data['data']['time_applied'] = ctime(time())
+
+
+    #required files
+    resume_file = request.files['resume']
+    profile_pic_file = request.files['profilePic']
+    video_file = request.files['elevatorPitch']
+
+    #forming urls for the files
+    bucket = 'resume-testing-ats'
+    region = 'us-east-2'
+    folders = ["resume", "profile-pic", "elevator-pitch"]
+    file_names = [resume_file.filename, profile_pic_file.filename, video_file.filename]
+    urls = []
+    for i in range(len(folders)):   
+        urls += [f"https://{bucket}.s3.{region}.amazonaws.com/{folders[i]}/{file_names[i]}"]
+    
+    data['data']["resume"] = urls[0]
+    data['data']["profilePic"] = urls[1]
+    data['data']["elavatorPitch"] = urls[2]
 
     if data['ok']:
         data = data['data']
@@ -112,7 +147,8 @@ def submit_application(posting_id):
                 "status": True,
                 "message": 'Application submitted.'
             }
-            # upload()
+            #upload files to the s3
+            upload(resume_file, profile_pic_file, video_file)
             return make_response(jsonify(response_object), 200)
         except Exception as e:
             return make_response(return_exception(e), 400)
