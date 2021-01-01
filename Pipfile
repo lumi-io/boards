@@ -19,6 +19,7 @@ jsonschema = "*"
 flask-pymongo = "*"
 boto3 = "*"
 importlib-metadata = "*"
+requests = "*"
 
 [requires]
 python_version = "3.7"

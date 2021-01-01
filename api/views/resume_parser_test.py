@@ -4,8 +4,12 @@ from api.middlewares import upload_file
 
 import PyPDF2
 import base64
+import requests
+import json
+
 
 resume_parser_test = Blueprint("resume_parser_test", __name__)
+
 
 @resume_parser_test.route("/test/parse", methods=["POST"])
 def resume_parser():
@@ -21,13 +25,21 @@ def resume_parser():
        }
     4. Return payload
     """
-    
     # Receiving Resume as a PDF file
-    pdfFileObj = open('resume.pdf', 'rb')           # Creating a pdf file object
-    pdfReader = PyPDF2.PdfFileReader(pdfFileObj)    # Creating a pdf reader object
+    pdf_file_obj = request.files['resume'].read()
 
-    # Convert a pdf file into base64Binary
-    with open("resume.pdf", "rb") as pdf_file:
-        encoded_string = base64.b64encode(pdf_file.read())
-    pass
+    # Convert resume into base64
+    base64_resume = base64.b64encode(pdf_file_obj)
+    url = "https://emk9i3070g.execute-api.us-east-2.amazonaws.com/test/"
 
+
+    payload = "{ \r\n           \"body\": {\r\n               \"content\": \"" + str(base64_resume)[2:]  +"\"\r\n           }\r\n       }"
+
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    print("hit")
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    return json.loads(response.text)
