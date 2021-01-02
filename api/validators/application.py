@@ -11,7 +11,7 @@ application_schema = {
             "type": "string"
         },
         "timeApplied": {
-            "type": "string" #datatime??
+            "type": "string"
         },
         "applicantName": {
             "type": "string",
@@ -20,13 +20,16 @@ application_schema = {
             "type": "string"
         },
         "graduatingYear": {
-            "type": "integer"
+            "type": "integer",
+            "maximum": 3000
         },
         "phoneNumber": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 12
         },
         "GPA": {
-            "type": "number"
+            "type": "number",
+            "maximum": 4.0
         },
         "major": {
             "type": "string",
@@ -50,13 +53,14 @@ application_schema = {
             "type": "array"
         },
         "email": {
-            "type": "string"
+            "type": "string",
+            "format": "email"
         },
         "role": {
             "type": "string"
         }
     },
-    "required": ["applicationStatus", "resume", "elevatorPitch", "profilePic", "applicantName", "graduatingYear", "phoneNumber", "GPA", "major", "college", "email", "role"],
+    "required": ["resume", "elevatorPitch", "profilePic", "applicantName", "graduatingYear", "phoneNumber", "GPA", "major", "college", "email", "role"],
     #, "time_applied", "Q&A"
     "additionalProperties": False
 }

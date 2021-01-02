@@ -20,7 +20,7 @@ def return_exception(e):
     }
     return jsonify(response_object)
 
-# @application.route('/user/applications/upload', methods=['POST'])
+#upload s3 helper function
 def upload(resume_file, profile_pic_file, video_file, acl="public-read"):
     s3_client = boto3.client('s3')
     if resume_file:
@@ -135,7 +135,6 @@ def submit_application(posting_id):
     if data['ok']:
         data = data['data']
 
-        # By default, there should be no applications inside a job post
         try:
             applications.update(
                 {"postingKey": ObjectId(posting_id)},
