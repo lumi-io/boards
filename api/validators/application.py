@@ -60,7 +60,8 @@ application_schema = {
             "type": "string"
         }
     },
-    "required": ["resume", "elevatorPitch", "profilePic", "applicantName", "graduatingYear", "phoneNumber", "GPA", "major", "college", "email", "role"],
+    #"required": ["resume", "elevatorPitch", "profilePic", "applicantName", "graduatingYear", "phoneNumber", "GPA", "major", "college", "email", "role"],
+    "required": ["applicantName", "graduatingYear", "phoneNumber", "GPA", "major", "college", "email", "role"],
     #, "time_applied", "Q&A"
     "additionalProperties": False
 }
