@@ -17,9 +17,11 @@ flask-jwt-extended = "*"
 flask-bcrypt = "*"
 jsonschema = "*"
 flask-pymongo = "*"
-boto3 = "*"
 importlib-metadata = "*"
 requests = "*"
+dnspython = "*"
+boto3 = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.7"

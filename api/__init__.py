@@ -5,6 +5,7 @@ from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from flask import Flask
 from flask_pymongo import PyMongo
+from flask_cors import CORS
 from bson.objectid import ObjectId
 
 
@@ -24,9 +25,11 @@ class JSONEncoder(json.JSONEncoder):
 # Objects and Instances to be used in other files are placed here
 mongo = PyMongo()
 app = Flask(__name__)
+CORS(app)
 # https://flask-jwt-extended.readthedocs.io/en/stable/api/
 jwt = JWTManager(app)
 flask_bcrypt = Bcrypt(app)
+blacklist = set()
 
 
 def create_app(test_config=False):
@@ -62,11 +65,23 @@ def configure_mongo_uri(app, test_config):
 
 def register_blueprints(app):
     """ Helper function to register blueprints into Flask App """
-    from api.views import main
-    from api.views import admin_auth
-    from api.views import resume_parser_test
+    from api.views.main import main
+    from api.views.admin_auth import admin_auth
+    from api.views.admin_postings import job_post
+    from api.views.application import application
+    from api.views.admin_applications import admin_applications
+    from api.views.resume_parser_test import resume_parser_test
+    # from api.views import filename here
 
     print("Registering Flask Blueprints.")
-    app.register_blueprint(main.main)
-    app.register_blueprint(admin_auth.admin_auth)
-    app.register_blueprint(resume_parser_test.resume_parser_test)
+    app.register_blueprint(main)
+    app.register_blueprint(admin_auth)
+    app.register_blueprint(job_post)
+    app.register_blueprint(application)
+    app.register_blueprint(admin_applications)
+    app.register_blueprint(resume_parser_test)
+
+    # register error Handler
+    # app.register_error_handler(Exception, all_exception_handler)
+
+    return app
