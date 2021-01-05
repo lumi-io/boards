@@ -22,6 +22,7 @@ requests = "*"
 dnspython = "*"
 boto3 = "*"
 flask-cors = "*"
+pypdf2 = "*"
 
 [requires]
 python_version = "3.7"
