@@ -44,18 +44,16 @@ def register():
         )
 
         email_confirmation_id = str(uuid.uuid4())
-        data["email_confirmation_id"] = email_confirmation_id
-        data["email_confirmed"] = False
-
-        send_confirmation_email(email, email_confirmation_id)
-
+        data["emailConfirmationId"] = email_confirmation_id
+        data["emailConfirmed"] = False
+        
         try:
             send_confirmation_email(email, email_confirmation_id)
 
         except Exception as e:
             response_object = {
                 "status": False,
-                "message": e.response['Error']['Message']
+                "message": e
             }
             return make_response(jsonify(response_object), 400)
 
@@ -77,11 +75,25 @@ def register():
 @admin_auth.route('/confirmation/<confirmation_id>', methods=['GET'])
 def confirm_registration(confirmation_id):
     """ Endpoint that verifies user's signup process through a confirmation ID from email """
+
+    def is_valid_uuid(val):
+        try:
+            uuid.UUID(str(val))
+            return True
+        except ValueError:
+            return False
+
+    if not is_valid_uuid(confirmation_id):
+        response_object = {
+            "status": False,
+            "message": "Invalid confirmation parameter."
+        }
+
     user = users.update(
-        {"email_confirmation_id": confirmation_id},
+        {"emailConfirmationId": confirmation_id},
         {
-            "$set": {"email_confirmed": True},
-            "$unset": {"email_confirmation_id": ""}
+            "$set": {"emailConfirmed": True},
+            "$unset": {"emailConfirmationId": ""}
         },
         upsert=False
     )
@@ -96,6 +108,7 @@ def confirm_registration(confirmation_id):
         "status": True,
         "message": "Email verified."
     }
+    return "verified"
     return response_object(jsonify(response_object), 200)
 
 
@@ -119,7 +132,7 @@ def resend_confirmation():
             }
             return make_response(jsonify(response_object), 400)
 
-        if user["email_confirmed"]:
+        if user["emailConfirmed"]:
             response_object = {
                 "status": False,
                 "message": "User has already been verified."
@@ -133,7 +146,7 @@ def resend_confirmation():
         user = users.update(
             {"email": email},
             {
-                "$set": {"email_confirmation_id": new_confirmation_id},
+                "$set": {"emailConfirmationId": new_confirmation_id},
             },
             upsert=False
         )
@@ -149,7 +162,7 @@ def resend_confirmation():
         except Exception as e:
             response_object = {
                 "status": False,
-                "message": e.response['Error']['Message']
+                "message": e
             }
             return make_response(jsonify(response_object), 400)
 
@@ -176,7 +189,7 @@ def auth_user():
                                "message": "Email does not exist."}
             return make_response(jsonify(response_object), 401)
 
-        if not user["email_confirmed"]:
+        if not user["emailConfirmed"]:
             response_object = {
                 "status": False,
                 "message": "Registration incomplete. User has not confirmed their email."
