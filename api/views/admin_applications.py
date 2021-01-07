@@ -18,7 +18,6 @@ def return_exception(e):
     }
     return jsonify(response_object)
 
-
 @admin_applications.route('/admin/postings/<posting_id>/applications', methods=['GET'])
 @jwt_required
 def read_all_applications(posting_id):

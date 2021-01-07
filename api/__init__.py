@@ -29,6 +29,7 @@ CORS(app)
 # https://flask-jwt-extended.readthedocs.io/en/stable/api/
 jwt = JWTManager(app)
 flask_bcrypt = Bcrypt(app)
+blacklist = set()
 
 
 def create_app(test_config=False):
@@ -69,6 +70,7 @@ def register_blueprints(app):
     from api.views.admin_postings import job_post
     from api.views.application import application
     from api.views.admin_applications import admin_applications
+    from api.views.resume_parser_test import resume_parser_test
     # from api.views import filename here
 
     print("Registering Flask Blueprints.")
@@ -77,6 +79,7 @@ def register_blueprints(app):
     app.register_blueprint(job_post)
     app.register_blueprint(application)
     app.register_blueprint(admin_applications)
+    app.register_blueprint(resume_parser_test)
 
     # register error Handler
     # app.register_error_handler(Exception, all_exception_handler)
