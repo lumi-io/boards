@@ -158,3 +158,10 @@ def submit_application(posting_id):
             "message": 'Bad request parameters: {}'.format(data['message'])
         }
         return make_response(jsonify(response_object), 400)
+
+application.route('/user/applications/withdraw/<posting_id>', methods=['POST'])
+def withdraw_application(posting_id):
+    #1. Delete fields from mongoDB and mark applicantStatus as withdrawn
+    #2. Delete doc from AWS S3, search according to file names
+    #3. Return response
+    pass
