@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request, make_response
 from flask_jwt_extended import (create_access_token, create_refresh_token,
                                 jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 from api.validators.user import validate_user, validate_email
-from api import mongo, flask_bcrypt, jwt, blacklist
+from api import mongo, flask_bcrypt, jwt, blacklist, app
 from api.middlewares.confirmation_email import send_confirmation_email
 import uuid
 from botocore.exceptions import ClientError
@@ -53,15 +53,18 @@ def register():
         data["emailConfirmationId"] = email_confirmation_id
         data["emailConfirmed"] = False
         
-        try:
-            send_confirmation_email(email, email_confirmation_id)
+        if app.config["FLASK_ENV"] == "test":
+            pass
+        else:
+            try:
+                send_confirmation_email(email, email_confirmation_id)
 
-        except Exception as e:
-            response_object = {
-                "status": False,
-                "message": e
-            }
-            return make_response(jsonify(response_object), 400)
+            except Exception as e:
+                response_object = {
+                    "status": False,
+                    "message": str(e)
+                }
+                return make_response(jsonify(response_object), 400)
 
         mongo.db.users.insert_one(data)
         response_object = {
@@ -95,7 +98,9 @@ def confirm_registration(confirmation_id):
             "message": "Invalid confirmation parameter."
         }
 
-    user = users.update(
+        return make_response(jsonify(response_object), 401)
+
+    user = users.update_one(
         {"emailConfirmationId": confirmation_id},
         {
             "$set": {"emailConfirmed": True},
@@ -103,10 +108,18 @@ def confirm_registration(confirmation_id):
         },
         upsert=False
     )
-    if user["nModified"] == 0 and not user["updatedExisting"]:
+
+    if not user.acknowledged:
         response_object = {
             "status": False,
             "message": "Invalid ID. Please register a new user or resend the verification email."
+        }
+        return make_response(jsonify(response_object), 401)
+
+    if user.modified_count == 0:
+        response_object = {
+            "status": False,
+            "message": "User already has been registered. Please register a new user or resend the verification email."
         }
         return make_response(jsonify(response_object), 401)
 

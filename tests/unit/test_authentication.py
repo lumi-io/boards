@@ -1,7 +1,9 @@
 import json
+from api import mongo
 
 token = ""
 refresh_token = ""
+email_confirmation_id = ""
 
 
 def test_create_user(test_client):
@@ -24,9 +26,15 @@ def test_create_user(test_client):
                        "12345678").status_code == 200
     assert create_user(test_client, "abcdefg@test.com",
                        "12345678").status_code == 400
+    user = mongo.db.users.find_one(
+        {"email": "abcdefg@test.com"}
+    )
+    global email_confirmation_id
+    email_confirmation_id = user["emailConfirmationId"]
 
 
-def test_login_user(test_client):
+
+def test_confirm_registration_and_login_user(test_client):
     """ Test for logging in a user """
 
     def login_user(client, email, password):
@@ -39,6 +47,26 @@ def test_login_user(test_client):
             json=data
         )
         return response
+
+    def confirm_registration(client, confirmation_id):
+        response = client.get(
+            "/confirmation/" + confirmation_id,
+        )
+        return response
+
+    # Test case for short password
+    assert login_user(
+        test_client,
+        "abcdefg@test.com",
+        "1234678"
+    ).status_code == 401
+
+    assert confirm_registration(
+        test_client, "random string").status_code == 401
+    assert confirm_registration(
+        test_client, email_confirmation_id).status_code == 200
+    assert confirm_registration(
+        test_client, email_confirmation_id).status_code == 401
 
     # Test case for short password
     assert login_user(
@@ -115,7 +143,7 @@ def test_logout_user(test_client):
             }
         )
         return response
-    
+
     # Test case for using refresh token
     assert logout(
         test_client,
