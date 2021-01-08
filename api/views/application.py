@@ -159,9 +159,37 @@ def submit_application(posting_id):
         }
         return make_response(jsonify(response_object), 400)
 
-application.route('/user/applications/withdraw/<posting_id>', methods=['POST'])
-def withdraw_application(posting_id):
+application.route('/user/applications/withdraw/<posting_id>/<applicant_id>', methods=['POST'])
+def withdraw_application(posting_id, applicant_id):
+    try:
+        update_response = applications.find_and_modify(
+            query={
+                "postingKey": ObjectId(posting_id),
+                "applications.applicantId": ObjectId(applicant_id)
+            },
+            update={"$set": {
+                "application_status": "withdrawn"
+            }}
+        )
+
+        if update_response["nModified"] == 0:
+            response_object = {
+                "status": True,
+                "message": "Delete unsuccessful. No application found with the id " + applicant_id + "."
+            }
+
+            return make_response(jsonify(response_object), 200)
+
+        response_object = {
+            "status": True,
+            "message": "Applicant " + applicant_id + " removed."
+        }
+
+        return make_response(jsonify(response_object), 200)
+
+    except Exception as e:
+        return make_response(return_exception(e), 400)
     #1. Delete fields from mongoDB and mark applicantStatus as withdrawn
     #2. Delete doc from AWS S3, search according to file names
     #3. Return response
-    pass
+    # pass
