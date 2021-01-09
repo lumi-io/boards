@@ -127,7 +127,8 @@ def confirm_registration(confirmation_id):
         "status": True,
         "message": "Email verified."
     }
-    return "verified"
+
+    # Need to find a way in the frontend to reroute to main page
     return response_object(jsonify(response_object), 200)
 
 
