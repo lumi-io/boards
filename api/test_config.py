@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+FLASK_ENV = 'test'
+
 MONGODB_DB = os.getenv('MONGODB_TEST_DB')
 MONGODB_HOST = os.getenv('MONGODB_TEST_HOST')
 MONGODB_PORT = int(os.getenv('MONGODB_TEST_PORT'))
