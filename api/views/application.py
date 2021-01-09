@@ -74,6 +74,13 @@ def upload(resume_file, profile_pic_file, video_file, acl="public-read"):
         }
         return make_response(jsonify(response_object), 400)
 
+def delete_applicant_files(applicant_id):
+    try:
+        s3_client = boto3.client('s3')
+        files = s3_client.list_objects(Bucket=bucket_name)['Contents']
+        for file in files:
+            s3_client.delete_objects(Bucket=bucket_name, Key=file["Key"])
+        
 #should be put in the admin router
 @application.route('/user/applications/<bucket_name>', methods=['POST'])    
 def delete_all(bucket_name):
@@ -189,6 +196,7 @@ def withdraw_application(posting_id, applicant_id):
 
     except Exception as e:
         return make_response(return_exception(e), 400)
+    # too much work to search file in aws? need to delete there?
     #1. Delete fields from mongoDB and mark applicantStatus as withdrawn
     #2. Delete doc from AWS S3, search according to file names
     #3. Return response

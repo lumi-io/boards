@@ -21,9 +21,8 @@ def test_submission(test_client):
             json=data
         )
         return response
-
+    #test for correct posting_id
     assert submission(test_client, "5fec8dd5bf32a87a49998afd").status_code == 400
-    # assert submission(test_client, "abcdefg@test.com",
-    #                    "12345678").status_code == 200
-    # assert submission(test_client, "abcdefg@test.com",
-    #                    "12345678").status_code == 400
+
+    #test for incorrect posting_id
+    assert submission(test_client, "5fec8dd5bf32a87a49998ajk").status_code == 200
