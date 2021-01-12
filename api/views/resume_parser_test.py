@@ -38,6 +38,12 @@ def resume_parser():
         'Content-Type': 'application/json'
     }
     
-    # Return payload 
+    # extraction of info from the returned payload
     response = requests.request("POST", url, headers=headers, data=payload)
-    return json.loads(response.text)
+    response = response.json()["body"]
+    summary_keys = ['names', 'emails', "phones", 'schools', 'links', 'summary', 'positions']
+    res = json.loads(response) 
+    summary = {}
+    for i in summary_keys:
+        summary[i] = res[i] 
+    return json.dumps(summary)
