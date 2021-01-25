@@ -6,6 +6,7 @@ from api.validators.job_post import validate_job
 from api import mongo, flask_bcrypt, jwt
 
 import json
+import boto3
 
 job_post = Blueprint("job_post", __name__)  # initialize blueprint
 postings = mongo.db.postings
@@ -38,6 +39,16 @@ def create_posting():
             app_doc = {"postingKey": ObjectId(posting_id.inserted_id), "applications": []}
             # Inserts corresponding application doc in applications collection
             applications.insert_one(app_doc)
+
+            # Creates a new folder in the S3 bucket corresponding to a posting
+            s3 = boto3.client('s3')
+            bucket_name = "resume-testing-ats"
+            folder_name = str(posting_id.inserted_id)
+            s3.put_object(Bucket=bucket_name, Key=(folder_name+'/'))
+            s3.put_object(Bucket=bucket_name, Key=(folder_name+'/resume/'))
+            s3.put_object(Bucket=bucket_name, Key=(folder_name+'/profile-pic/'))
+            s3.put_object(Bucket=bucket_name, Key=(folder_name+'/elevator-pitch/'))
+
             response_object = {
                 "status": True,
                 "message": 'New job post created successfully.'
