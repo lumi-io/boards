@@ -5,22 +5,24 @@ from jsonschema.exceptions import SchemaError
 application_schema = {
     "type": "object",
     "properties": {
-        "application_status": {
+        "applicant_id": {
+        },
+        "applicationStatus": {
             "type": "string"
         },
-        "time_applied": {
+        "timeApplied": {
             "type": "string" #datatime??
         },
-        "name": {
+        "applicantName": {
             "type": "string",
         },
-        "avatar": {
+        "profilePic": {
             "type": "string"
         },
-        "graduating_year": {
+        "graduatingYear": {
             "type": "integer"
         },
-        "phone_number": {
+        "phoneNumber": {
             "type": "string"
         },
         "GPA": {
@@ -33,12 +35,12 @@ application_schema = {
             "type": "string"
         },
         "college": {
-            "type": "array"
-        },
-        "Resume": {
             "type": "string"
         },
-        "URLs": {
+        "resume": {
+            "type": "string"
+        },
+        "elevatorPitch": {
             "type": "string"
         },
         "other_URL": {
@@ -54,11 +56,10 @@ application_schema = {
             "type": "string"
         }
     },
-    "required": ["application_status"],
-    #, "time_applied", "name", "avatar", "graduating_year", "phone_number", "GPA", "major", "college", "Resume", "URLs", "other_URL", "Q&A", "email", "role"
+    "required": ["applicationStatus", "resume", "elevatorPitch", "profilePic", "applicantName", "graduatingYear", "phoneNumber", "GPA", "major", "college", "email", "role"],
+    #, "time_applied", "Q&A"
     "additionalProperties": False
 }
-
 
 def validate_application(data):
     try:
