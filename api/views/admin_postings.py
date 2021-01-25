@@ -21,7 +21,7 @@ def return_exception(e):
 
 
 @job_post.route('/admin/postings/create', methods=['POST'])
-@jwt_required
+# @jwt_required
 def create_posting():
     """ Endpoint to create a new job posting """
     # Validates if the format is correct
