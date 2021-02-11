@@ -86,7 +86,7 @@ def read_all_postings():
 
 
 @job_post.route('/admin/postings/<posting_id>', methods=['GET'])
-@jwt_required
+# @jwt_required
 def read_specific_posting(posting_id):
     """ Endpoint that gets information of specific job post based on id """
     try:
@@ -116,26 +116,15 @@ def edit_specific_posting(posting_id):
         updated_data = request.get_json()
         update_response = postings.update_one(
             # Finds posting doc based on posting_id
-            filter = {
+            {
                 "_id": ObjectId(posting_id)
             },
             # Updates field in doc with given value
-            update = { 
-                "$set": {updated_data['field']: updated_data['value']} 
-                # FIX: check isVisible data type
+            { 
+                "$set": updated_data 
             } 
         )
 
-        # # Searches based on query and overwrites all the data from scratch with input data
-
-        # update_response = applications.find_and_modify(
-        #     query={
-        #         "postingKey": ObjectId(posting_id),
-        #     },
-        #     update={"$set": {
-        #         "postings.$": updated_data
-        #     }}
-        # )
 
         if update_response is None:
             response_object = {

@@ -20,10 +20,14 @@ job_schema = {
         },
         "isVisible": {
             "type": "boolean"
+        },
+        "deadline": {
+            "type": "string",
+            "format": "date-time"
         }
 
     },
-    "required": ["title", "info", "createdBy", "isVisible"],
+    "required": ["title", "info", "isVisible", "deadline"],
     "additionalProperties": False
 }
 
