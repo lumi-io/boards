@@ -19,7 +19,7 @@ def return_exception(e):
     return jsonify(response_object)
 
 @admin_applications.route('/admin/postings/<posting_id>/applications', methods=['GET'])
-@jwt_required
+# @jwt_required
 def read_all_applications(posting_id):
     """ Endpoint that gets all applications of a posting/job """
     try:
@@ -37,7 +37,7 @@ def read_all_applications(posting_id):
 
 
 @admin_applications.route('/admin/postings/<posting_id>/applications/<applicant_id>', methods=['GET'])
-@jwt_required
+# @jwt_required
 def read_specific_application(posting_id, applicant_id):
     """ Endpoint that gets a specific application of a posting """
     try:
