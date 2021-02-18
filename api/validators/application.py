@@ -5,60 +5,41 @@ from jsonschema.exceptions import SchemaError
 application_schema = {
     "type": "object",
     "properties": {
-        "applicant_id": {
-        },
-        "applicationStatus": {
+        "firstName": {
             "type": "string"
         },
-        "timeApplied": {
-            "type": "string" #datatime??
-        },
-        "applicantName": {
-            "type": "string",
-        },
-        "profilePic": {
+        "lastName": {
             "type": "string"
-        },
-        "graduatingYear": {
-            "type": "integer"
-        },
-        "phoneNumber": {
-            "type": "string"
-        },
-        "GPA": {
-            "type": "number"
-        },
-        "major": {
-            "type": "string",
-        },
-        "minor": {
-            "type": "string"
-        },
-        "college": {
-            "type": "string"
-        },
-        "resume": {
-            "type": "string"
-        },
-        "elevatorPitch": {
-            "type": "string"
-        },
-        "other_URL": {
-            "type": "string"
-        },
-        "Q&A": {
-            "type": "array"
         },
         "email": {
+            "type": "string",
+            "format": "email"
+        },
+        "phone": {
+            "type": "string",
+            "pattern": "^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$"
+        },
+        "gradYear": {
             "type": "string"
         },
-        "role": {
+        "major": {
+            "type": "string"
+        },
+        # "minor": {
+        #     "type": "string"
+        # },
+        "linkedin": {
+            "type": "string"
+        },
+        "website": {
+            "type": "string"
+        },
+        "marketing": {
             "type": "string"
         }
     },
-    "required": ["applicationStatus", "resume", "elevatorPitch", "profilePic", "applicantName", "graduatingYear", "phoneNumber", "GPA", "major", "college", "email", "role"],
-    #, "time_applied", "Q&A"
-    "additionalProperties": False
+    "required": ["firstName", "lastName", "email", "phone", "gradYear", "major"],
+    "additionalProperties": True
 }
 
 def validate_application(data):

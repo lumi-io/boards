@@ -5,29 +5,28 @@ from jsonschema.exceptions import SchemaError
 job_schema = {
     "type": "object",
     "properties": {
+        "isVisible": {
+            "type": "boolean"
+        },
         "title": {
             "type": "string"
         },
-        "info": {
+        "aboutUs": {
             "type": "string"
         },
-        "application": {
+        "qualifications": {
             "type": "array"
-        },
-
-        "createdBy": {
-            "type": "string",
-        },
-        "isVisible": {
-            "type": "boolean"
         },
         "deadline": {
             "type": "string",
             "format": "date-time"
+        },
+        "essay": {
+            "type": "array"
         }
 
     },
-    "required": ["title", "info", "isVisible", "deadline"],
+    "required": ["isVisible", "title", "aboutUs", "qualifications", "deadline", "essay"],
     "additionalProperties": False
 }
 
