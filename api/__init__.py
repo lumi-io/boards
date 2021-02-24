@@ -25,9 +25,8 @@ class JSONEncoder(json.JSONEncoder):
 # Objects and Instances to be used in other files are placed here
 mongo = PyMongo()
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
-# https://flask-jwt-extended.readthedocs.io/en/stable/api/
-jwt = JWTManager(app)
+CORS(app)
+# jwt = JWTManager(app)
 flask_bcrypt = Bcrypt(app)
 blacklist = set()
 
@@ -35,15 +34,6 @@ blacklist = set()
 def create_app(test_config=False):
     """ Initializes and adds necessary information into the Flask app object """
 
-    app.config['JWT_SECRET_KEY'] = "test"
-    app.config['JWT_TOKEN_LOCATION'] = ['cookies', 'headers']
-    app.config['JWT_COOKIE_CSRF_PROTECT'] = True
-    app.config['JWT_CSRF_CHECK_FORM'] = True
-    # app.config['JWT_ACCESS_COOKIE_PATH'] = "http://localhost:3000/"
-    # app.config['JWT_CSRF_METHODS'] = ["POST", "PUT", "PATCH", "DELETE", "GET"]
-    # app.config["JWT_COOKIE_SECURE"] = True
-    # app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(seconds=1800)
-    # app.config['JWT_REFRESH_TOKEN_EXPIRES'] = datetime.timedelta(days=15)
     app.json_encoder = JSONEncoder
 
     configure_mongo_uri(app, test_config)  # MongoDB configuration
