@@ -1,7 +1,6 @@
 import os
 import json
 import datetime
-from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from flask import Flask
 from flask_pymongo import PyMongo
@@ -25,8 +24,7 @@ class JSONEncoder(json.JSONEncoder):
 # Objects and Instances to be used in other files are placed here
 mongo = PyMongo()
 app = Flask(__name__)
-CORS(app)
-# jwt = JWTManager(app)
+CORS(app, supports_credentials=True)
 flask_bcrypt = Bcrypt(app)
 blacklist = set()
 
@@ -63,14 +61,14 @@ def configure_mongo_uri(app, test_config):
 
 def register_blueprints(app):
     """ Helper function to register blueprints into Flask App """
-    from api.views.main import main
     from api.views.admin_postings import job_post
     from api.views.application import application
     from api.views.admin_applications import admin_applications
+    from api.views.general import general
     # from api.views import filename here
 
     print("Registering Flask Blueprints.")
-    app.register_blueprint(main)
+    app.register_blueprint(general)
     app.register_blueprint(job_post)
     app.register_blueprint(application)
     app.register_blueprint(admin_applications)
