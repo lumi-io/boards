@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request, make_response
 from bson.objectid import ObjectId
 from api.validators.application import validate_application
-from api import mongo, flask_bcrypt, jwt
+from api import mongo
 import boto3
 from botocore.exceptions import ClientError, WaiterError
 import json
@@ -39,7 +39,6 @@ def upload_resume(posting_id, acl="public-read"):
                 "ContentType": file.content_type
             }
         )
-        print(response)
         return f"https://{BUCKET}.s3.{REGION}.amazonaws.com/" + posting_id + "/resume/{}".format(filename)
     except Exception as e:
         print(e)
@@ -173,17 +172,7 @@ def submit_application(posting_id):
     """ Endpoint to append an application to a job posting """
 
     data = request.get_json()
-    validation_res = validate_application(data)
-    if validation_res["ok"]:
-        data = validation_res["data"]
-    else:
-        response_object = {
-            "status": False,
-            "message": 'Fields are missing. Please fill out all the necessary fields.'
-        }
-        return make_response(jsonify(response_object), 400)
-
-    data["applicationId"] = ObjectId()
+    data["applicantId"] = ObjectId()
     data['timeApplied'] = ctime(time())
     print(data)
 
