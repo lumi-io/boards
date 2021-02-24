@@ -172,7 +172,7 @@ def submit_application(posting_id):
 
     # TODO: Add validation for data, to be discussed.
     data = request.get_json()
-    data["applicationId"] = ObjectId()
+    data["applicantId"] = ObjectId()
     data['timeApplied'] = ctime(time())
     print(data)
 
