@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request, make_response
 from bson.objectid import ObjectId
 from api.validators.job_post import validate_job
-from api import mongo, flask_bcrypt, jwt
+from api import mongo
 
 import json
 import boto3
