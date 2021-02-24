@@ -1,7 +1,6 @@
 import os
 import json
 import datetime
-from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from flask import Flask
 from flask_pymongo import PyMongo
@@ -25,8 +24,7 @@ class JSONEncoder(json.JSONEncoder):
 # Objects and Instances to be used in other files are placed here
 mongo = PyMongo()
 app = Flask(__name__)
-CORS(app)
-# jwt = JWTManager(app)
+CORS(app, supports_credentials=True)
 flask_bcrypt = Bcrypt(app)
 blacklist = set()
 

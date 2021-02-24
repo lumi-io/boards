@@ -67,6 +67,7 @@ def create_posting():
 def read_all_postings():
     """ Endpoint that gets all titles to be read by the default page """
     all_postings = []
+    print(all_postings)
     try:
         for posting in postings.find():
             all_postings.append(posting)
