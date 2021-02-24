@@ -40,7 +40,8 @@ def upload_resume(posting_id, acl="public-read"):
             }
         )
         return f"https://{BUCKET}.s3.{REGION}.amazonaws.com/" + posting_id + "/resume/{}".format(filename)
-    except:
+    except Exception as e:
+        print(e)
         return make_response(return_exception(ClientError), 400)
 
 
@@ -170,7 +171,6 @@ def update_filenames(posting_id, applicant_id, urls):
 def submit_application(posting_id):
     """ Endpoint to append an application to a job posting """
 
-    # TODO: Add validation for data, to be discussed.
     data = request.get_json()
     data["applicantId"] = ObjectId()
     data['timeApplied'] = ctime(time())
