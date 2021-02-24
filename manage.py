@@ -5,7 +5,6 @@ from api import create_app
 
 # sets up the app
 app = create_app()
-
 # manager = Manager(app)
 # migrate = Migrate(app, db)
 
@@ -17,19 +16,6 @@ app = create_app()
 # @manager.command
 # def runworker():
 #     app.run(debug=False)
-
-
-# @manager.command
-# def recreate_db():
-#     """
-#     Recreates a database. This should only be used once
-#     when there's a new database instance. This shouldn't be
-#     used when you migrate your database.
-#     """
-#     db.drop_all()
-#     db.create_all()
-#     db.session.commit()
-
 
 if __name__ == "__main__":
     app.run()
