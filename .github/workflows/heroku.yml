@@ -1,6 +1,8 @@
-name: Push Container to Heroku
+name: CD Heroku
 
-on: [push]
+on: 
+   push:
+    branches: [ main ]
 
 jobs:
   build:
