@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request, make_response
 from bson.objectid import ObjectId
 from api.validators.job_post import validate_job
 from api import mongo
+import pdfkit
 
 admin_applications = Blueprint(
     "admin_applications", __name__)  # initialize blueprint
@@ -32,6 +33,18 @@ def read_all_applications(posting_id):
     except Exception as e:
         return make_response(return_exception(e), 400)
 
+@admin_applications.route('/admin/postings/<posting_id>/pdfapplications', methods=['GET'])
+def pdf_generator(posting_id):
+    data = read_all_applications(posting_id)
+    pass
+
+
+def pdf_generator(url):
+    #set url to current url
+    #retrive applicant info from params in url
+    pdf = pdfkit.from_url('http://google.com', False)
+    with open('applicant_name.pdf', 'wb') as f:
+        f.write(pdf)
 
 @admin_applications.route('/admin/postings/<posting_id>/applications/<applicant_id>', methods=['GET'])
 def read_specific_application(posting_id, applicant_id):
