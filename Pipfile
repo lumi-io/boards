@@ -23,6 +23,7 @@ dnspython = "*"
 boto3 = "*"
 flask-cors = "*"
 pypdf2 = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
