@@ -154,6 +154,12 @@ def delete_specific_posting(posting_id):
             }
             return make_response(jsonify(response_object), 200)
 
+        # Deletes folder and objects in the S3 bucket corresponding to a posting
+        s3 = boto3.resource('s3')
+        bucket_name = "resume-testing-ats"
+        folder_name = str(posting_id)
+        s3.Bucket(bucket_name).objects.filter(Prefix=folder_name).delete()
+
         response_object = {
             "status": True,
             "message": 'Posting deleted.'
