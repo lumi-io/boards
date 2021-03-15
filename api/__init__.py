@@ -1,7 +1,6 @@
 import os
 import json
 import datetime
-from flask_bcrypt import Bcrypt
 from flask import Flask
 from flask_pymongo import PyMongo
 from flask_cors import CORS
@@ -25,7 +24,6 @@ class JSONEncoder(json.JSONEncoder):
 mongo = PyMongo()
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
-flask_bcrypt = Bcrypt(app)
 blacklist = set()
 
 
