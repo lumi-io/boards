@@ -10,7 +10,7 @@ dev-container:
 	docker stop dev_container || true && docker rm dev_container || true
 	docker build -t dev_container .
 	docker run -d --name=dev_container -p 56733:80 dev_container
-g
+
 
 deploy-container:
 	docker build \
