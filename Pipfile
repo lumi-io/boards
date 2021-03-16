@@ -13,8 +13,6 @@ pytest = "*"
 coverage = "*"
 flake8 = "*"
 pymongo = {extras = ["srv"], version = "*"}
-flask-jwt-extended = "*"
-flask-bcrypt = "*"
 jsonschema = "*"
 flask-pymongo = "*"
 importlib-metadata = "*"
