@@ -15,3 +15,8 @@ deploy-container:
 	docker build -t whyphi_server .
 	docker tag whyphi_server:latest 280776660572.dkr.ecr.us-east-2.amazonaws.com/whyphi_server:latest
 	docker push 280776660572.dkr.ecr.us-east-2.amazonaws.com/whyphi_server:latest
+
+
+test:
+	docker build -t test .
+	docker run -d --name=test -p 1234:1234 ehjggknsjk
