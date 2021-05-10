@@ -7,7 +7,3 @@ general = Blueprint("general", __name__)  # initialize blueprint
 @general.route("/")
 def index():
     return "Success" 
-
-@general.route("/api/testing")
-def testing():
-    return "saw the changes!"

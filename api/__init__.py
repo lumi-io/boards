@@ -24,7 +24,6 @@ class JSONEncoder(json.JSONEncoder):
 mongo = PyMongo()
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
-blacklist = set()
 
 
 def create_app(test_config=False):
@@ -43,11 +42,16 @@ def create_app(test_config=False):
 
 def configure_mongo_uri(app, test_config):
     """ Helper function to configure MongoDB URI """
+    # Setting up configurtion based on environment
     if test_config:
         app.config.from_pyfile('test_config.py')
     else:
-        app.config.from_pyfile('config.py')
+        if app.config["ENV"] == "development":
+            app.config.from_pyfile('config.py')
+        elif app.config["ENV"] == "production":
+            app.config.from_pyfile('prod_config.py')
 
+    # Connecting Flask App with DB
     app.config["MONGO_URI"] = "mongodb+srv://"+app.config["MONGODB_USERNAME"] + \
         ":"+app.config["MONGODB_PASSWORD"]+"@"+app.config["MONGODB_HOST"]
     try:
@@ -59,11 +63,10 @@ def configure_mongo_uri(app, test_config):
 
 def register_blueprints(app):
     """ Helper function to register blueprints into Flask App """
-    from api.views.admin_postings import job_post
-    from api.views.application import application
-    from api.views.admin_applications import admin_applications
-    from api.views.general import general
-    # from api.views import filename here
+    from api.controllers.admin_postings import job_post
+    from api.controllers.application import application
+    from api.controllers.admin_applications import admin_applications
+    from api.controllers.general import general
 
     print("Registering Flask Blueprints.")
     app.register_blueprint(general)
