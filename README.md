@@ -1,4 +1,4 @@
-# Boards
+# Boards (legacy backend server)
 
 Application Tracking System
 
